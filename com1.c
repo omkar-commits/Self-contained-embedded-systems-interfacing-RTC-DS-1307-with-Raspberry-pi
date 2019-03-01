@@ -11,7 +11,7 @@ int bcdToDec(char b) { return (b/16)*10 + (b%16); }
 int main(){
    int file;
    printf("Starting the DS1307 test application\n");
-   if((file=open("/dev/i2c-2", O_RDWR)) < 0){
+   if((file=open("/dev/i2c-1", O_RDWR)) < 0){
       perror("failed to open the bus\n");
       return 1;
    }
