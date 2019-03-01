@@ -1,12 +1,19 @@
 #include <stdio.h>
 
-int main(){
-int a=12, b=18;
-int sum,
+int main()
+{
+    int firstNumber, secondNumber, sumOfTwoNumbers;
+    
+    printf("Enter two integers: ");
 
-sum=a+b;
+    // Two integers entered by user is stored using scanf() function
+    scanf("%d %d", &firstNumber, &secondNumber);
 
-printf("The sum of two integers = ", &sum);
+    // sum of two numbers in stored in variable sumOfTwoNumbers
+    sumOfTwoNumbers = firstNumber + secondNumber;
 
-return 0;
+    // Displays sum      
+    printf("%d + %d = %d", firstNumber, secondNumber, sumOfTwoNumbers);
+
+    return 0;
 }
