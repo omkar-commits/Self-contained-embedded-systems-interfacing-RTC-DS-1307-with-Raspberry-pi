@@ -44,6 +44,10 @@ public:
 	 }
  }
 
+int main (){
+     cout << "Finally the code runs till here" << endl;
+
+}
 
 /*#include<stdio.h>
 #include<fcntl.h>
