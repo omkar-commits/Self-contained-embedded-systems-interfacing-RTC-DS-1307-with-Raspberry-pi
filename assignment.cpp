@@ -1,4 +1,3 @@
-
 //============================================================================
 // Name        : assignment1ee513.cpp
 // Author      : Omkar
@@ -25,7 +24,7 @@ public:
 	Rpi2c(int);
 	//int file;
 	int address= 0x68;
-	//int I2C_SLAVE;
+	int I2C_SLAVE;
 };
 
  Rpi2c::Rpi2c(int address)
