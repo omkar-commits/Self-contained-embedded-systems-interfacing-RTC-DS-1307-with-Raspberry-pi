@@ -44,6 +44,42 @@ public:
 	 }
  }
 
+ int Rpi2c::write(unsigned char value){
+
+    unsigned char buffer[1];
+
+    buffer[0]=value;
+
+    if (::write(i2cfile, buffer, 1)!=1){
+
+       perror("I2C: Failed to write to the device.");
+
+       return 1;
+
+    }
+
+    return 0;
+
+ }
+ unsigned char Rpi2c::readRegister(int registeraddress){
+
+    write(registeraddress);
+
+    unsigned char buffer[1];
+
+    if(::read(i2cfile, buffer, 1)!=1){
+
+       perror("I2C: Failed to read in the value.");
+
+       return 1;
+
+    }
+
+    return buffer[0];
+
+ }
+ 
+ 
 int main (){
      cout << "Finally the code runs till here" << endl;
 
