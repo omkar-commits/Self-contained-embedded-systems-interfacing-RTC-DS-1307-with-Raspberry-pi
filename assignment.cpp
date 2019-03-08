@@ -44,7 +44,7 @@ public:
 	 }
  }
 
- int Rpi2c::write(unsigned char value){
+ Rpi2c::write(unsigned char value){
 
     unsigned char buffer[1];
 
@@ -61,11 +61,11 @@ public:
     return 0;
 
  }
- unsigned char Rpi2c::readRegister(int registeraddress){
+  Rpi2c::readRegister(int registeraddress){
 
     write(registeraddress);
 
-    unsigned char buffer[1];
+    unsigned char buffer[2];
 
     if(::read(i2cfile, buffer, 1)!=1){
 
@@ -78,7 +78,6 @@ public:
     return buffer[0];
 
  }
- 
  
 int main (){
      cout << "Finally the code runs till here" << endl;
