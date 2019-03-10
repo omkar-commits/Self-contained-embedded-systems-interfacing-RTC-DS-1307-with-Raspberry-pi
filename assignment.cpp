@@ -93,7 +93,8 @@ return 1;
  int main (){
 
 	 Rpi2c x;
-	 //x.rtc_w();
+	 x.connection();
+	 x.rtc_w();
 	 x.rtc_r();
 	 close (i2cfile);
 	 return 0;
