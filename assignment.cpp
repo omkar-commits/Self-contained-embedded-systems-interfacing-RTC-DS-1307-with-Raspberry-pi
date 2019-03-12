@@ -9,8 +9,8 @@
 #include<sys/ioctl.h>
 using namespace std;
 #define BUFFER_SIZE 19      //0x00 to 0x12
+#define HEX(x) setw(2) << setfill('0') << hex << (int)(x)
 int bcdToDec(char b) { return (b/16)*10 + (b%16); }
-int decToBcd (char b) { return (b/10*16) + (b%10); }
 int i2cfile;
 class Rpi2c{
 protected:
@@ -23,13 +23,9 @@ public:
 	int rtc_w();
 	int rtc_r();
 
+	int number=7;
+	int data=0;
 	unsigned char value=0x00;
-	/*unsigned char minutes=0x01;
-	unsigned char hours=0x02;
-	unsigned char dayOfweek=0x03;
-	unsigned char day=0x04;
-	unsigned char month=0x05;
-	unsigned char year=0x06;*/
 	unsigned char buffer[BUFFER_SIZE];
 	//virtual ~Rpi2c();
 };
@@ -54,7 +50,6 @@ public:
  int Rpi2c::rtc_w(){
 	// unsigned char buffer[1];
 	 buffer[0]=value;
-
 	rtcdata= write(i2cfile, buffer, 1);
 
 	if(rtcdata !=1){
@@ -66,8 +61,8 @@ return 1;
 
 
  int Rpi2c::rtc_r(){
+ 	// unsigned char* data= new unsigned char [number];
  	 buffer[0]=value;
-
  	rtcdata= read(i2cfile, buffer,7);
 
  	if(rtcdata !=7){
@@ -87,7 +82,6 @@ return 1;
 
  				cout << "The Time in RTC is:" << endl;
  				cout << "Date Y/M/D:"<<  bcdToDec(year)<<"-"<<  bcdToDec(month)<< "-"<<  bcdToDec(day)<<endl;
- 				cout << "day is " << bcdToDec(dayOfWeek) << endl;
  				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<<  bcdToDec(seconds)<<endl;
   }
 
@@ -105,5 +99,3 @@ return 1;
 	 close (i2cfile);
 	 return 0;
  }
-
-
