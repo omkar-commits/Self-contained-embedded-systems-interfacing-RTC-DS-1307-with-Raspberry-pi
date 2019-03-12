@@ -23,8 +23,6 @@ public:
 	int rtc_w();
 	int rtc_r();
 
-	int number=7;
-	int data=0;
 	unsigned char value=0x00;
 	/*unsigned char minutes=0x01;
 	unsigned char hours=0x02;
@@ -68,7 +66,6 @@ return 1;
 
 
  int Rpi2c::rtc_r(){
- 	// unsigned char* data= new unsigned char [number];
  	 buffer[0]=value;
 
  	rtcdata= read(i2cfile, buffer,7);
