@@ -21,21 +21,21 @@ public:
 	//Rpi2c(int);
 	int connection();
 	int address= 0x68;
-	virtual int rtc_w(unsigned int registeraddress, unsigned char value);
-	virtual int rtc_w();
-	virtual unsigned char rtc_r();
-	virtual unsigned char* rtc_r(unsigned int number, unsigned int fromaddress=0);
+	virtual int rtc_w(unsigned int registeraddress, unsigned int value);
+	virtual int rtc_w(unsigned int value);
+	virtual unsigned int rtc_r();
+	virtual unsigned int* rtc_r(unsigned int number, unsigned int fromaddress=0);
 
 	int number=7;
 	int data=0;
-	unsigned char value=0x00;
-	unsigned char minutes=0x01;
-	unsigned char hours=0x02;
-	unsigned char dayOfweek=0x03;
-	unsigned char day=0x04;
-	unsigned char month=0x05;
-	unsigned char year=0x06;
-	unsigned char buffer[BUFFER_SIZE];
+	unsigned int value=0x00;
+	unsigned int minutes=0x01;
+	unsigned int hours=0x02;
+	unsigned int dayOfweek=0x03;
+	unsigned int day=0x04;
+	unsigned int month=0x05;
+	unsigned int year=0x06;
+	unsigned int buffer[BUFFER_SIZE];
 	//virtual ~Rpi2c();
 };
 
@@ -56,8 +56,8 @@ public:
 
 	 }
  }
- int Rpi2c::rtc_w(unsigned int registeraddress, unsigned char value){
-	 unsigned char buffer[2];
+ int Rpi2c::rtc_w(unsigned int registeraddress, unsigned int value){
+	 unsigned int buffer[2];
 	 buffer[0]=registeraddress;
 	 buffer[1]=value;
 
@@ -70,8 +70,8 @@ return 1;
 	return 0;
  }
 
- int Rpi2c::rtc_w(){
-	 unsigned char buffer[1];
+ int Rpi2c::rtc_w(unsigned int value){
+	 unsigned int buffer[1];
 	 buffer[0]=value;
 	 rtcdata= write(i2cfile, buffer, 1);
 
@@ -81,9 +81,9 @@ return 1;
 	 	}
 	 	return 0;
  }
- unsigned char Rpi2c::rtc_r(){
-	 rtc_w();
-	 unsigned char buffer[1];
+ unsigned int Rpi2c::rtc_r(){
+	 rtc_w(registeraddress);
+	 unsigned int buffer[1];
 
 	 rtcdata= read(i2cfile, buffer, 1);
 
@@ -109,9 +109,9 @@ return 1;
   }
 return 0;
 }
- unsigned char* Rpi2c::rtc_r(unsigned int number, unsigned int fromaddress){
-	 rtc_w();
-	 unsigned char* data= new unsigned char [number];
+ unsigned int* Rpi2c::rtc_r(unsigned int number, unsigned int fromaddress){
+	 rtc_w(fromaddress);
+	 unsigned int* data= new unsigned int [number];
  	 buffer[0]=value;
 
  	rtcdata= read(i2cfile, buffer,number);
