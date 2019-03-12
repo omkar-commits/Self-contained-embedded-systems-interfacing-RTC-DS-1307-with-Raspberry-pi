@@ -10,7 +10,7 @@
 using namespace std;
 #define BUFFER_SIZE 19      //0x00 to 0x12
 #define HEX(x) setw(2) << setfill('0') << hex << (int)(x)
-int bcdToDec(char b) { return (b/16)*10 + (b%16); }
+int bcdToDec(char b) { return (b/16*10) + (b%16); }
 int decToBcd (char b) { return (b/10*16) + (b%10); }
 int i2cfile;
 class Rpi2c{
