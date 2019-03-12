@@ -118,9 +118,9 @@ return 0;
 
  	if(rtcdata != number){
  		perror("I2c failed to read data from the device");
- 		return 1;
+ 		return NULL;
  	}
- return 0;
+ return buffer[0];
  }
 
 
