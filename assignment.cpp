@@ -21,8 +21,10 @@ public:
 	//Rpi2c(int);
 	int connection();
 	int address= 0x68;
-	int rtc_w();
-	int rtc_r();
+	virtual int rtc_w(unsigned int registeraddress, unsigned char value);
+	virtual int rtc_w(unsigned char value);
+	virtual unsigned char rtc_r(unsigned int registeraddress);
+	virtual unsigned char* rtc_r(unsigned int number, unsigned int fromaddress=0);
 
 	int number=7;
 	int data=0;
@@ -34,7 +36,7 @@ public:
 	unsigned char month=0x05;
 	unsigned char year=0x06;
 	unsigned char buffer[BUFFER_SIZE];
-	//virtual ~Rpi2c();
+	virtual ~Rpi2c();
 };
 
  int Rpi2c::connection()
@@ -54,45 +56,53 @@ public:
 
 	 }
  }
- int Rpi2c::rtc_w(){
-	// unsigned char buffer[1];
-	 buffer[0]=value;
-	 buffer[1]=0x00;
-	 buffer[2]=0x00;
-	 buffer[3]=0x00;
-	 buffer[4]=0x00;
-	 buffer[5]=0x00;
-	 buffer[6]=0x00;
-	/* buffer[7]=0x07;
-	 buffer[8]=0x08;
-	 buffer[9]=0x09;
-	 buffer[10]=0x10;
-	 buffer[11]=0x11;
-	 buffer[12]=0x12;*/
-	rtcdata= write(i2cfile, buffer, 7);
+ int Rpi2c::rtc_w(unsigned int registeraddress, unsigned char value){
+	 unsigned char buffer[2];
+	 buffer[0]=registeraddress;
+	 buffer[1]=value;
 
-	if(rtcdata !=7){
+	rtcdata= write(i2cfile, buffer, 2);
+
+	if(rtcdata !=2){
 		perror("I2c failed to write the device");
 return 1;
 	}
 	return 0;
  }
 
+ int Rpi2c::rtc_w(unsigned char value){
+	 unsigned char buffer[1];
+	 buffer[0]=value;
+	 rtcdata= write(i2cfile, buffer, 1);
 
- int Rpi2c::rtc_r(){
- 	// unsigned char* data= new unsigned char [number];
+	 	if(rtcdata !=1){
+	 		perror("I2c failed to write the device");
+	 return 1;
+	 	}
+	 	return 0;
+ }
+ unsigned char Rpi2c::rtc_r(unsigned int registeraddress){
+	 rtc_w(registeraddress);
+	 unsigned char buffer[1];
+
+	 rtcdata= read(i2cfile, buffer, 1);
+
+	 	if(rtcdata !=1){
+	 		perror("I2c failed to write the device");
+	 return 1;
+	 	}
+	 	return 0;
+ }
+ unsigned char* Rpi2c::rtc_r(unsigned int number, unsigned int fromaddress){
+	 rtc_w(fromaddress);
+	 unsigned char* data= new unsigned char [number];
  	 buffer[0]=value;
- 	 buffer[1]=0x01;
- 		 buffer[2]=0x02;
- 		 buffer[3]=0x03;
- 		 buffer[4]=0x04;
- 		 buffer[5]=0x05;
- 		 buffer[6]=0x06;
- 	rtcdata= read(i2cfile, buffer,7);
 
- 	if(rtcdata !=7){
+ 	rtcdata= read(i2cfile, buffer,number);
+
+ 	if(rtcdata != number){
  		perror("I2c failed to read data from the device");
- 		return 1;
+ 		return NULL;
  	}
  	else           // return data
  			{
