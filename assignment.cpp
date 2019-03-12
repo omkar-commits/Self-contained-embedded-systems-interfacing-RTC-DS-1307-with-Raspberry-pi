@@ -58,7 +58,7 @@ public:
 	// unsigned char buffer[1];
 	 buffer[0]=value;
 	 buffer[1]=0x01;
-	 buffer[2]=0x02;
+	 buffer[2]=0x08;
 	 buffer[3]=0x03;
 	 buffer[4]=0x04;
 	 buffer[5]=0x05;
