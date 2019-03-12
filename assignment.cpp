@@ -22,8 +22,8 @@ public:
 	int connection();
 	int address= 0x68;
 	virtual int rtc_w(unsigned int registeraddress, unsigned char value);
-	virtual int rtc_w(unsigned char value);
-	virtual unsigned char rtc_r(unsigned int registeraddress);
+	virtual int rtc_w();
+	virtual unsigned char rtc_r();
 	virtual unsigned char* rtc_r(unsigned int number, unsigned int fromaddress=0);
 
 	int number=7;
@@ -70,7 +70,7 @@ return 1;
 	return 0;
  }
 
- int Rpi2c::rtc_w(unsigned char value){
+ int Rpi2c::rtc_w(){
 	 unsigned char buffer[1];
 	 buffer[0]=value;
 	 rtcdata= write(i2cfile, buffer, 1);
@@ -81,8 +81,8 @@ return 1;
 	 	}
 	 	return 0;
  }
- unsigned char Rpi2c::rtc_r(unsigned int registeraddress){
-	 rtc_w(registeraddress);
+ unsigned char Rpi2c::rtc_r(){
+	 rtc_w();
 	 unsigned char buffer[1];
 
 	 rtcdata= read(i2cfile, buffer, 1);
@@ -94,7 +94,7 @@ return 1;
 	 	return 0;
  }
  unsigned char* Rpi2c::rtc_r(unsigned int number, unsigned int fromaddress){
-	 rtc_w(fromaddress);
+	 rtc_w();
 	 unsigned char* data= new unsigned char [number];
  	 buffer[0]=value;
 
