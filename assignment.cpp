@@ -23,7 +23,7 @@ public:
 	int address= 0x68;
 	int rtc_w();
 	int rtc_read();
-	int rtc_write();
+//	int rtc_write();
 
 	int number=7;
 	int data=0;
@@ -138,7 +138,7 @@ public:
 	 Rpi2c x;
 	 x.connection();
 	 x.rtc_w();
-	 x.rtc_write();
+	// x.rtc_write();
 	 x.rtc_read();
 
 	 close (i2cfile);
