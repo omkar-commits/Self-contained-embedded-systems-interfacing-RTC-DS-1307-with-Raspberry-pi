@@ -51,21 +51,21 @@ public:
  int Rpi2c::rtc_w(){
 	// unsigned char buffer[1];
 	 buffer[0]=value;
-	/* buffer[1]=0x01;
+	 buffer[1]=0x01;
 	 buffer[2]=0x02;
 	 buffer[3]=0x03;
 	 buffer[4]=0x04;
 	 buffer[5]=0x05;
 	 buffer[6]=0x06;
-	 buffer[7]=0x07;
+	/* buffer[7]=0x07;
 	 buffer[8]=0x08;
 	 buffer[9]=0x09;
 	 buffer[10]=0x10;
 	 buffer[11]=0x11;
 	 buffer[12]=0x12;*/
-	rtcdata= write(i2cfile, buffer, 1);
+	rtcdata= write(i2cfile, buffer, 7);
 
-	if(rtcdata !=1){
+	if(rtcdata !=7){
 		perror("I2c failed to write the device");
 return 1;
 	}
@@ -76,6 +76,12 @@ return 1;
  int Rpi2c::rtc_r(){
  	// unsigned char* data= new unsigned char [number];
  	 buffer[0]=value;
+ 	 buffer[1]=0x01;
+ 		 buffer[2]=0x02;
+ 		 buffer[3]=0x03;
+ 		 buffer[4]=0x04;
+ 		 buffer[5]=0x05;
+ 		 buffer[6]=0x06;
  	rtcdata= read(i2cfile, buffer,7);
 
  	if(rtcdata !=7){
