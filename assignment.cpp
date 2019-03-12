@@ -120,7 +120,7 @@ return 0;
  		perror("I2c failed to read data from the device");
  		return NULL;
  	}
- return buffer[0];
+ return 0;
  }
 
 
