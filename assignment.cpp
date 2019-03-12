@@ -36,7 +36,7 @@ public:
 	unsigned char month=0x05;
 	unsigned char year=0x06;
 	unsigned char buffer[BUFFER_SIZE];
-	virtual ~Rpi2c();
+	//virtual ~Rpi2c();
 };
 
  int Rpi2c::connection()
