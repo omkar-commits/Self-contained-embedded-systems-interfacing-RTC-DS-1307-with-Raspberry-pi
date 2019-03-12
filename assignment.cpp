@@ -57,7 +57,7 @@ public:
 	 buffer[4]=0x04;
 	 buffer[5]=0x05;
 	 buffer[6]=0x06;
-	 buffer[7]=0x07;
+	 //buffer[7]=0x07;
 	/* buffer[8]=0x08;
 	 buffer[9]=0x09;
 	 buffer[10]=0x10;
