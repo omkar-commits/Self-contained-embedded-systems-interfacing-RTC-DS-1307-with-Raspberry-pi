@@ -91,20 +91,7 @@ return 1;
 	 		perror("I2c failed to write the device");
 	 return 1;
 	 	}
-	 	return 0;
- }
- unsigned char* Rpi2c::rtc_r(unsigned int number, unsigned int fromaddress){
-	 rtc_w();
-	 unsigned char* data= new unsigned char [number];
- 	 buffer[0]=value;
-
- 	rtcdata= read(i2cfile, buffer,number);
-
- 	if(rtcdata != number){
- 		perror("I2c failed to read data from the device");
- 		return NULL;
- 	}
- 	else           // return data
+	 		else           // return data
  			{
 
  				char seconds = buffer[0];
@@ -120,7 +107,19 @@ return 1;
  				cout << "day is " << bcdToDec(dayOfWeek) << endl;
  				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<<  bcdToDec(seconds)<<endl;
   }
+return 0;
+}
+ unsigned char* Rpi2c::rtc_r(unsigned int number, unsigned int fromaddress){
+	 rtc_w();
+	 unsigned char* data= new unsigned char [number];
+ 	 buffer[0]=value;
 
+ 	rtcdata= read(i2cfile, buffer,number);
+
+ 	if(rtcdata != number){
+ 		perror("I2c failed to read data from the device");
+ 		return 1;
+ 	}
  return 0;
  }
 
