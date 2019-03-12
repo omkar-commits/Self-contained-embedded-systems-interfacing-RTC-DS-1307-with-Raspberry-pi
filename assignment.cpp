@@ -57,12 +57,12 @@ public:
  int Rpi2c::rtc_w(){
 	// unsigned char buffer[1];
 	 buffer[0]=value;
-	 buffer[1]=0x01;
-	 buffer[2]=0x08;
-	 buffer[3]=0x03;
-	 buffer[4]=0x04;
-	 buffer[5]=0x05;
-	 buffer[6]=0x06;
+	 buffer[1]=0x00;
+	 buffer[2]=0x00;
+	 buffer[3]=0x00;
+	 buffer[4]=0x00;
+	 buffer[5]=0x00;
+	 buffer[6]=0x00;
 	/* buffer[7]=0x07;
 	 buffer[8]=0x08;
 	 buffer[9]=0x09;
