@@ -10,7 +10,7 @@
 using namespace std;
 #define BUFFER_SIZE 19      //0x00 to 0x12
 #define HEX(x) setw(2) << setfill('0') << hex << (int)(x)
-int bcdToDec(char b) { return (b/16*10) + (b%16); }
+int bcdToDec(char b) { return (b/16)*10 + (b%16); }
 int decToBcd (char b) { return (b/10*16) + (b%10); }
 int i2cfile;
 class Rpi2c{
@@ -27,6 +27,12 @@ public:
 	int number=7;
 	int data=0;
 	unsigned char value=0x00;
+	unsigned char buffer[1]=0x01;
+	unsigned char buffer[2]=0x02;
+	unsigned char buffer[3]=0x03;
+	unsigned char buffer[4]=0x04;
+	unsigned char buffer[5]=0x05;
+	unsigned char buffer[6]=0x06;
 	unsigned char buffer[BUFFER_SIZE];
 	//virtual ~Rpi2c();
 };
