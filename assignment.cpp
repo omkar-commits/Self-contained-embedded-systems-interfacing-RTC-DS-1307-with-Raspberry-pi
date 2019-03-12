@@ -56,9 +56,9 @@ public:
 	 	 buffer[2]=0x09;
 	 	 buffer[3]=0x03;
 
-	 	rtcdata= write(i2cfile, buffer, 7);
+	 	rtcdata= write(i2cfile, buffer, 4);
 
-	 	if(rtcdata !=7){
+	 	if(rtcdata !=4){
 	 		perror("I2c failed to write the device");
 	 return 1;
 	 	}
@@ -71,7 +71,7 @@ public:
 	 		 				cout << "The Time written in RTC is:" << endl;
 	 		 				 				//cout << "Date Y/M/D:"<<  decToBcd(year)<<"-"<<  decToBcd(month)<< "-"<<  decToBcd(day)<<endl;
 	 		 				 				//cout << "Day of this week"<<  decToBcd(dayOfWeek)<<endl;
-	 		 				 				//cout << "Time H/M/S: "<<  decToBcd(hours)<< "-"<<   decToBcd(minutes)<< "-"<< decToBcd(seconds)<<endl;
+	 		 				 cout << "Time H/M/S: "<<  decToBcd(hours)<< "-"<<   decToBcd(minutes)<< "-"<< decToBcd(seconds)<<endl;
 	 	}
 	return 0;
  }
