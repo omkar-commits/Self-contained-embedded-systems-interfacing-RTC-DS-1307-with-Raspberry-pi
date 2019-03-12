@@ -27,12 +27,12 @@ public:
 	int number=7;
 	int data=0;
 	unsigned char value=0x00;
-	unsigned char buffer[1]=0x01;
-	unsigned char buffer[2]=0x02;
-	unsigned char buffer[3]=0x03;
-	unsigned char buffer[4]=0x04;
-	unsigned char buffer[5]=0x05;
-	unsigned char buffer[6]=0x06;
+	unsigned char minutes=0x01;
+	unsigned char hours=0x02;
+	unsigned char dayOfweek=0x03;
+	unsigned char day=0x04;
+	unsigned char month=0x05;
+	unsigned char year=0x06;
 	unsigned char buffer[BUFFER_SIZE];
 	//virtual ~Rpi2c();
 };
