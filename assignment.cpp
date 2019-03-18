@@ -13,12 +13,24 @@ using namespace std;
 int bcdToDec(char b) { return (b/16)*10 + (b%16); }
 int decToBcd(char b){ return (b/10*16) + (b%10); }
 int i2cfile;
+typedef struct {
+        int sec;        /*!< seconds [0..59] */
+        int min;        /*!< minutes {0..59] */
+        int hour;       /*!< hours [0..23] */
+        int wday;       /*!< weekday [1..7, where 1 = sunday, 2 = monday, ... */
+        int date;       /*!< day of month [0..31] */
+        int mon;        /*!< month of year [1..12] */
+        int year;       /*!< year [2000..2255] */
+    } Time_rtc;
+
+
 typedef enum {
 		        RS1Hz = 0,
 		        RS4kHz = 1,
 		        RS8kHz = 2,
 		        RS32kHz = 3
 		    } SqwRateSelect_t;
+
 class Rpi2c{
 protected:
 
@@ -29,7 +41,8 @@ public:
 	int address= 0x68;
 	int rtc_w();
 	int rtc_read();
-	  
+	int rtc_alarm();
+
 	bool swq_op(bool ena,SqwRateSelect_t rs);
 	int current_time();
 //	int rtc_write();
@@ -58,6 +71,7 @@ public:
 		 cout << "For slave I2C address can't be set" << endl;
 
 	 }
+	 return 0;
  }
  int Rpi2c::rtc_w(){
 	// unsigned char buffer[1];
@@ -160,7 +174,56 @@ else{
 
   return 0;
  }
+ int Rpi2c::rtc_alarm(){
+	// unsigned char buffer[1];
+	buffer[8]={0x07}; // setting the Timekeepr registers
+	rtcdata= write(i2cfile, buffer, 1);
 
+	if(rtcdata !=1){
+		perror("I2c failed to write the device");
+return 1;
+	}
+else{
+	 //buffer[0]=value;
+	 	 buffer[9]=0x05;
+	 	 buffer[10]=0x09;
+	 	 buffer[11]=0x03;
+	 	 buffer[12]=0x02;
+	 	 buffer[13]=0x18;
+	 	 buffer[14]=0x03;
+	 	 buffer[15]=0x19;
+
+	 	rtcdata= write(i2cfile, buffer, 8);
+
+	 	if(rtcdata !=8){
+	 		perror("I2c failed to write the device");
+	 return 1;
+	 	}
+	 	else{
+	 		unsigned char seconds = buffer[9];
+	 		unsigned char minutes = buffer[10];
+	 		 				unsigned char hours = buffer[11];
+	 		 				unsigned char dayOfWeek = buffer[12];
+	 		 				unsigned char day = buffer[13];
+	 		 				unsigned char month = buffer[14];
+	 		 				unsigned char year = buffer[15];
+
+	 		 				cout << "The Time written in RTC for alarm: " << endl;
+	 		 						cout << "Date Y/M/D:"<<  bcdToDec(year)<<"-"<<  bcdToDec(month)<< "-"<<  bcdToDec(day)<<endl;
+	 		 				 				cout << "Day of this week"<<  bcdToDec(dayOfWeek)<<endl;
+	 		 				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<< bcdToDec(seconds)<<endl;
+	 	}
+//	return buffer;
+ }
+	return 0;
+ }
+ 
+/* if ((buffer[1] && buffer[9] || buffer[2] && buffer[10] ||buffer[3] && buffer[11] ||buffer[4] && buffer[12] ||buffer[5] && buffer[13] || buffer[6] && buffer[14] ||buffer[7] && buffer[15])=1){
+	 
+	 cout<< " the RTc current timr and set alarm time are same -> trigger " << endl;
+	 
+ }*/
+/*
 bool Rpi2c::swq_op(bool ena, SqwRateSelect_t rs){
 	unsigned char buffer[8]= {0x07}; // firtst trying to read buffer values.
 	cout << "firtst trying to read buffer values" << endl;
@@ -180,8 +243,10 @@ return 0;
 			return 0;
 			}
 			cout << "Successfuly changes the squarewave output" << endl;
-		//	return 1;
+			return 1;
 }
+
+*/
 
 
  int main (){
@@ -191,7 +256,8 @@ return 0;
 	 x.current_time();
 	 x.rtc_w();
 	 x.rtc_read();
-	 x.swq_op(true,RS4kHz);
+	 x.rtc_alarm();
+	// x.swq_op(true,RS4kHz);
 
 	 close (i2cfile);
 	 return 0;
