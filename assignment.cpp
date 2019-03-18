@@ -54,17 +54,17 @@ public:
 
 };
 
- int Rpi2c::connection()                 // this function checks the I2C slave address and set the I2C address
+ int Rpi2c::connection()                 // this function checks the I2C slave address and set the I2C address // Open a connection to an I2C device
  {
-		char filename[11] = "/dev/i2c-1";
+		char filename[11] = "/dev/i2c-1";    // configure  i2c bus  in filename 
 
-	 i2cfile= open(filename, O_RDWR);
+	 i2cfile= open(filename, O_RDWR);  // this command is used to open the file in i2c bus
 
 	 if(i2cfile <0){
 		 cout << "Failed to open the bus" << endl;
 	 }
 
-	 if(ioctl(i2cfile, I2C_SLAVE, address) <0){
+	 if(ioctl(i2cfile, I2C_SLAVE, address) <0){         // Tthis is the imput output contro which is used to connect the module
 		 perror("failed to connect to the sensor\n");
 
 		 cout << "For slave I2C address can't be set" << endl;
@@ -72,17 +72,18 @@ public:
 	 }
 	 return 0;
  }
- int Rpi2c::rtc_w(){
+ int Rpi2c::rtc_w(){            // Write function is used to set the date time and day in the buffer registers of rtc
 	// unsigned char buffer[1];
 	buffer[0]=value; // Set CH bit to "0" 
-	rtcdata= write(i2cfile, buffer, 1);  
+	rtcdata= write(i2cfile, buffer, 1);	//Write a single value to the I2C device. Used to set up the device to read from particular address.
+
 
 	if(rtcdata !=1){
-		perror("I2c failed to write the device");
+		perror("I2c failed to write the device");  // if I2c unable to write the device error is returned 
 return 1;
 	}
 else{
-	 //buffer[0]=value;
+	 //buffer[0]=value;                                // The values are set as follows and written in  the buffer registers 
 	 	 buffer[1]=0x05;
 	 	 buffer[2]=0x09;
 	 	 buffer[3]=0x03;
@@ -94,11 +95,11 @@ else{
 	 	rtcdata= write(i2cfile, buffer, 8);
 
 	 	if(rtcdata !=8){
-	 		perror("I2c failed to write the device");
+	 		perror("I2c failed to write the device"); // if I2c unable to write the device error is returned 
 	 return 1;
-	 	}
-	 	else{
-	 		unsigned char seconds = buffer[1];
+	 	}                  
+	 	else{                                                   // to get the written values the data are stored as follows 
+	 		unsigned char seconds = buffer[1];  
 	 		unsigned char minutes = buffer[2];
 	 		 				unsigned char hours = buffer[3];
 	 		 				unsigned char dayOfWeek = buffer[4];
@@ -113,16 +114,16 @@ else{
 	 	}
 //	return buffer;
  }
-	return 0;
+	return 0; //return 1 on failure to write, 0 on success
  }
  int Rpi2c::rtc_read(){
  	// unsigned char* data= new unsigned char [number];
  	// buffer[0]=value;
- 	rtcdata= read(i2cfile, buffer,7);
+ 	rtcdata= read(i2cfile, buffer,7);              // to read values after writing the values in buffer register 
 
  	if(rtcdata !=7){
  		perror("I2c failed to read data from the device");
- 		return 1;
+ 		return 1;  //return 1 on failure to write, 0 on success
  	}
  	else           // return data
  			{
@@ -144,7 +145,7 @@ else{
 
  return 0;
  }
- int Rpi2c::current_time(){
+ int Rpi2c::current_time(){         // To read the current time before write the values in rtc
   	// unsigned char* data= new unsigned char [number];
   	// buffer[0]=value;
   	rtcdata= read(i2cfile, buffer,7);
@@ -223,7 +224,7 @@ else{
 	 
  }*/
 
-bool Rpi2c::swq_op(bool ena, SqwRateSelect_t rs){
+bool Rpi2c::swq_op(bool ena, SqwRateSelect_t rs){   //Passing SQWE->ena and  RS->SqwRateSelect_t bits
 	unsigned char buffer[8]= {0x07}; // first trying to read buffer values.  // Setting the buffer at address 0x07 as this is to control square waves.
 	cout << "first trying to read buffer values" << endl;
 		if (!read(7,buffer, 1)){
@@ -254,8 +255,8 @@ return 0;
 	 x.current_time();
 	 x.rtc_w();
 	 x.rtc_read();
-	 x.rtc_alarm();
-	 x.swq_op(true,RS4kHz);
+	// x.rtc_alarm(); 
+	 x.swq_op(true,RS4kHz);  //Passing SQWE->ena and  RS->SqwRateSelect_t bits
 
 	 close (i2cfile);
 	 return 0;
