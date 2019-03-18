@@ -180,7 +180,7 @@ return 0;
 			return 0;
 			}
 			cout << "Successfuly changes the squarewave output" << endl;
-			return 1;
+		//	return 1;
 }
 
 
