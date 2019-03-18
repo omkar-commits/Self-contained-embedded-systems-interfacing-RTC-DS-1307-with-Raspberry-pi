@@ -23,6 +23,7 @@ public:
 	int address= 0x68;
 	int rtc_w();
 	int rtc_read();
+		int current_time();
 //	int rtc_write();
 
 	int number=7;
