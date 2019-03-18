@@ -32,6 +32,12 @@ public:
 	unsigned char value=0x00;
 	unsigned char buffer[BUFFER_SIZE];
 	//virtual ~Rpi2c();
+	  typedef enum {
+        RS1Hz = 0,
+        RS4kHz = 1,
+        RS8kHz = 2,
+        RS32kHz = 3
+    } SqwRateSelect_t;
 };
 
  int Rpi2c::connection()
