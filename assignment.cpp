@@ -10,8 +10,8 @@
 using namespace std;
 #define BUFFER_SIZE 19      //0x00 to 0x12
 #define HEX(x) setw(2) << setfill('0') << hex << (int)(x)
-int bcdToDec(char b) { return (b/16)*10 + (b%16); }
-int decToBcd(char b){ return (b/10*16) + (b%10); }
+int bcdToDec(char b) { return (b/16)*10 + (b%16); }     // the timr in registers will be encoded in decimal form
+int decToBcd(char b){ return (b/10*16) + (b%10); }     // the timr in registers will be encoded in binary form
 int i2cfile;
 typedef struct {
         int sec;        
@@ -21,7 +21,7 @@ typedef struct {
         int date;       
         int mon;        
         int year;       
-    } Time_rtc;   // Structure defined to set alarm timr
+    } Time_rtc;   // Structure defined to set alarm time
 
 
 typedef enum {
@@ -29,7 +29,7 @@ typedef enum {
 		        RS4kHz = 1,
 		        RS8kHz = 2,
 		        RS32kHz = 3
-		    } SqwRateSelect_t; // 
+		    } SqwRateSelect_t; // set of constants declared to set frequency of square wave
 
 class Rpi2c{
 protected:
@@ -39,23 +39,22 @@ public:
 	//Rpi2c(int);
 	int connection();
 	int address= 0x68;
-	int rtc_w();
-	int rtc_read();
-	int rtc_alarm();
+	int rtc_w();  //Function to write the date in rtc
+	int rtc_read(); //function to read data from rtc
+	int rtc_alarm(); // function to write data in NVRam and compare this time with rtc to trgger alarm
 
-	bool swq_op(bool ena,SqwRateSelect_t rs);
-	int current_time();
+	bool swq_op(bool ena,SqwRateSelect_t rs); // function for square wave generation by passing SQWE bit and RS bit
+	int current_time();                 // Functio to display current time in rtc
 //	int rtc_write();
 
-	int number=7;
-	int data=0;
-	unsigned char value=0x00;
-	unsigned char buffer[BUFFER_SIZE];
+
+	unsigned char value=0x00;              //value declared to set the CH bit
+	unsigned char buffer[BUFFER_SIZE];     // Buffer size of 19 is defined
 	//virtual ~Rpi2c();
 
 };
 
- int Rpi2c::connection()
+ int Rpi2c::connection()                 // this function checks the I2C slave address and set the I2C address
  {
 		char filename[11] = "/dev/i2c-1";
 
@@ -75,8 +74,8 @@ public:
  }
  int Rpi2c::rtc_w(){
 	// unsigned char buffer[1];
-	buffer[0]=value; // CH bit to "0"
-	rtcdata= write(i2cfile, buffer, 1);
+	buffer[0]=value; // Set CH bit to "0" 
+	rtcdata= write(i2cfile, buffer, 1);  
 
 	if(rtcdata !=1){
 		perror("I2c failed to write the device");
@@ -174,7 +173,7 @@ else{
 
   return 0;
  }
- int Rpi2c::rtc_alarm(){
+/* int Rpi2c::rtc_alarm(){
 	// unsigned char buffer[1];
 	buffer[8]={0x07}; // setting the Timekeepr registers
 	rtcdata= write(i2cfile, buffer, 1);
@@ -218,35 +217,34 @@ else{
 	return 0;
  }
  
-/* if ((buffer[1] && buffer[9] || buffer[2] && buffer[10] ||buffer[3] && buffer[11] ||buffer[4] && buffer[12] ||buffer[5] && buffer[13] || buffer[6] && buffer[14] ||buffer[7] && buffer[15])=1){
+ if ((buffer[1] && buffer[9] || buffer[2] && buffer[10] ||buffer[3] && buffer[11] ||buffer[4] && buffer[12] ||buffer[5] && buffer[13] || buffer[6] && buffer[14] ||buffer[7] && buffer[15])=1){
 	 
 	 cout<< " the RTc current timr and set alarm time are same -> trigger " << endl;
 	 
  }*/
-/*
+
 bool Rpi2c::swq_op(bool ena, SqwRateSelect_t rs){
-	unsigned char buffer[8]= {0x07}; // firtst trying to read buffer values.
-	cout << "firtst trying to read buffer values" << endl;
+	unsigned char buffer[8]= {0x07}; // first trying to read buffer values.  // Setting the buffer at address 0x07 as this is to control square waves.
+	cout << "first trying to read buffer values" << endl;
 		if (!read(7,buffer, 1)){
-			perror("Failed to read buffer values  .");
+			perror("Failed to read buffer values  ."); // If unable to read buffer values error is returned
 return 0;
 }
-		cout << "[buffer:0x07] = %02x\n" << buffer[8] <<endl;
+		cout << "[buffer:0x07] = %02x\n" << buffer[8] <<endl;  //  
 
-		//  preserve the OUT control bit while writing the frequency and enable bits
+		// This section preserve the OUT control bit while writing the frequency and enable bits
 		   buffer[8] = (buffer[8] & 0x80) | (ena ? 0x10 : 0) | ((char)rs & 0x03);
 			cout << "Writing back registers value" << endl;
 			cout << "[buffer:0x07] = %02x\n" << buffer[8] <<endl;
 
 			if (!write(7,buffer, 1)){
-						perror("Failed to write buffer values  .");
+						perror("Failed to write buffer values  .");  // If unable to write buffer values error is returned
 			return 0;
 			}
 			cout << "Successfuly changes the squarewave output" << endl;
 			return 1;
 }
 
-*/
 
 
  int main (){
@@ -257,7 +255,7 @@ return 0;
 	 x.rtc_w();
 	 x.rtc_read();
 	 x.rtc_alarm();
-	// x.swq_op(true,RS4kHz);
+	 x.swq_op(true,RS4kHz);
 
 	 close (i2cfile);
 	 return 0;
