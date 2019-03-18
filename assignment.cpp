@@ -114,7 +114,7 @@ else{
 
  				cout << "The Time after Read in RTC is:" << endl;
  				cout << "Date Y/M/D:"<<  bcdToDec(year)<<"-"<<  bcdToDec(month)<< "-"<<  bcdToDec(day)<<endl;
- 				cout << "Day of this week"<<  bcdToDec(dayOfWeek)<<endl;
+ 				cout << "Day of this week ->"<<  bcdToDec(dayOfWeek)<<endl;
 	 				cout << "Day of the week 1 -> Sunday \n Day of the week 2 -> Monday \n Day of the week 3 -> Tuesday \n Day of the week 4 -> Wednesday \n Day of the week 5 -> Thursday \nDay of the week 6 -> Friday \nDay of the week 7 -> Saturday \n"<<endl;
  				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<<  bcdToDec(seconds)<<endl;
   }
