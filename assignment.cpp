@@ -61,9 +61,9 @@ return 1;
 	}
 else{
 	 //buffer[0]=value;
-	 	 buffer[1]=0x05;
-	 	 buffer[2]=0x09;
-	 	 buffer[3]=0x03;
+	 	 buffer[1]=0x00;
+	 	 buffer[2]=0x00;
+	 	 buffer[3]=0x05;
 	 	 buffer[4]=0x02;
 	 	 buffer[5]=0x18;
 	 	 buffer[6]=0x03;
