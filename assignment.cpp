@@ -84,9 +84,9 @@ else{
  			         	char year = buffer[7];
 
 	 		 				cout << "The Time written in RTC is:" << endl;
-	 		 				 				cout << "Date Y/M/D:"<<  decToBcd(year)<<"-"<<  decToBcd(month)<< "-"<<  decToBcd(day)<<endl;
-	 		 				 				cout << "Day of this week"<<  decToBcd(dayOfWeek)<<endl;
-	 		 				cout << "Time H/M/S: "<<  decToBcd(hours)<< "-"<<   decToBcd(minutes)<< "-"<< decToBcd(seconds)<<endl;
+	 		 				 				cout << "Date Y/M/D:"<<  bcdToDec(year)<<"-"<<  bcdToDec(month)<< "-"<<  bcdToDec(day)<<endl;
+	 		 				 				cout << "Day of this week->"<<  bcdToDec(dayOfWeek)<<endl;
+	 		 				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<< bcdToDec(seconds)<<endl;
 	 	}
 	return 0;
  }
@@ -126,6 +126,7 @@ else{
 
 	 Rpi2c x;
 	 x.connection();
+	 //x.rtc_read();
 	 x.rtc_w();
 	 x.rtc_read();
 
