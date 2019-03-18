@@ -98,7 +98,7 @@ else{
 	 		 				 				cout << "Day of this week"<<  bcdToDec(dayOfWeek)<<endl;
 	 		 				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<< bcdToDec(seconds)<<endl;
 	 	}
-	return buffer;
+//	return buffer;
  }
 	return 0;
  }
