@@ -125,6 +125,9 @@ else{
   int Rpi2c::current_time(){
  	// unsigned char* data= new unsigned char [number];
  	// buffer[0]=value;
+ 		rtcdata=write(i2cfile,buffer,1);
+
+
  	rtcdata= read(i2cfile, buffer,7);
 
  	if(rtcdata !=7){
@@ -144,7 +147,7 @@ else{
 
  				cout << "The Time in RTC is:" << endl;
  				cout << "Date Y/M/D:"<<  bcdToDec(year)<<"-"<<  bcdToDec(month)<< "-"<<  bcdToDec(day)<<endl;
- 				cout << "Day of this week"<<  bcdToDec(dayOfWeek)<<endl;
+ 				cout << "Day of this week ->"<<  bcdToDec(dayOfWeek)<<endl;
  				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<<  bcdToDec(seconds)<<endl;
 
   }
