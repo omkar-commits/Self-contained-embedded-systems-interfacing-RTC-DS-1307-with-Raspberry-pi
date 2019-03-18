@@ -51,35 +51,50 @@ public:
  }
  int Rpi2c::rtc_w(){
 	// unsigned char buffer[1];
-	 buffer[0]=0x00;
+	buffer[0]=value;
+	rtcdata= write(i2cfile, buffer, 1);
+
+	if(rtcdata !=1){
+		perror("I2c failed to write the device");
+return 1;
+	}
+else{
+	 //buffer[0]=value;
 	 	 buffer[1]=0x05;
 	 	 buffer[2]=0x09;
 	 	 buffer[3]=0x03;
+	 	 buffer[4]=0x02;
+	 	 buffer[5]=0x18;
+	 	 buffer[6]=0x03;
+	 	 buffer[7]=0x19;
 
-	 	rtcdata= write(i2cfile, buffer, 4);
+	 	rtcdata= write(i2cfile, buffer, 8);
 
-	 	if(rtcdata !=4){
+	 	if(rtcdata !=8){
 	 		perror("I2c failed to write the device");
 	 return 1;
 	 	}
 	 	else{
-	 						char seconds = buffer[0];
-	 		 				char minutes = buffer[1];
-	 		 				char hours = buffer[2];
-	 		 				char dayOfWeek = buffer[3];
-	 		 				//char day = buffer[4];
+	 						char seconds = buffer[1];
+	 		 				char minutes = buffer[2];
+	 		 				char hours = buffer[3];
+	 		 				char dayOfWeek = buffer[4];
+ 				            char day = buffer[5];
+ 			            	char month = buffer[6];
+ 			         	char year = buffer[7];
+
 	 		 				cout << "The Time written in RTC is:" << endl;
-	 		 				 				//cout << "Date Y/M/D:"<<  decToBcd(year)<<"-"<<  decToBcd(month)<< "-"<<  decToBcd(day)<<endl;
-	 		 				 				//cout << "Day of this week"<<  decToBcd(dayOfWeek)<<endl;
-	 		 				 cout << "Time H/M/S: "<<  decToBcd(hours)<< "-"<<   decToBcd(minutes)<< "-"<< decToBcd(seconds)<<endl;
+	 		 				 				cout << "Date Y/M/D:"<<  decToBcd(year)<<"-"<<  decToBcd(month)<< "-"<<  decToBcd(day)<<endl;
+	 		 				 				cout << "Day of this week"<<  decToBcd(dayOfWeek)<<endl;
+	 		 				cout << "Time H/M/S: "<<  decToBcd(hours)<< "-"<<   decToBcd(minutes)<< "-"<< decToBcd(seconds)<<endl;
 	 	}
 	return 0;
  }
-
-
+}
  int Rpi2c::rtc_read(){
  	// unsigned char* data= new unsigned char [number];
- 	 buffer[0]=value;
+ //	buffer[0]=value;
+ 	rtcdata=write(i2cfile,buffer,1);
  	rtcdata= read(i2cfile, buffer,7);
 
  	if(rtcdata !=7){
@@ -97,48 +112,21 @@ public:
  				char month = buffer[5];
  				char year = buffer[6];
 
- 				cout << "The Time in RTC is:" << endl;
+ 				cout << "The Time after Read in RTC is:" << endl;
  				cout << "Date Y/M/D:"<<  bcdToDec(year)<<"-"<<  bcdToDec(month)<< "-"<<  bcdToDec(day)<<endl;
  				cout << "Day of this week"<<  bcdToDec(dayOfWeek)<<endl;
+	 				cout << "Day of the week 1 -> Sunday \n Day of the week 2 -> Monday \n Day of the week 3 -> Tuesday \n Day of the week 4 -> Wednesday \n Day of the week 5 -> Thursday \nDay of the week 6 -> Friday \nDay of the week 7 -> Saturday \n"<<endl;
  				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<<  bcdToDec(seconds)<<endl;
   }
 
  return 0;
  }
-/*
- int Rpi2c::rtc_write(){
- 	// unsigned char buffer[1];
- 	 buffer[0]=0x00;
- 	 buffer[1]=0x05;
- 	 buffer[2]=0x09;
- 	 buffer[3]=0x03;
 
- 	rtcdata= write(i2cfile, buffer, 7);
-
- 	if(rtcdata !=7){
- 		perror("I2c failed to write the device");
- return 1;
- 	}
- 	else{
- 						char seconds = buffer[0];
- 		 				char minutes = buffer[1];
- 		 				char hours = buffer[2];
- 		 				char dayOfWeek = buffer[3];
- 		 				//char day = buffer[4];
- 		 				cout << "The Time written in RTC is:" << endl;
- 		 				 				//cout << "Date Y/M/D:"<<  decToBcd(year)<<"-"<<  decToBcd(month)<< "-"<<  decToBcd(day)<<endl;
- 		 				 				//cout << "Day of this week"<<  decToBcd(dayOfWeek)<<endl;
- 		 				 				//cout << "Time H/M/S: "<<  decToBcd(hours)<< "-"<<   decToBcd(minutes)<< "-"<< decToBcd(seconds)<<endl;
- 	}
- 	return 0;
-  }
-*/
  int main (){
 
 	 Rpi2c x;
 	 x.connection();
 	 x.rtc_w();
-	// x.rtc_write();
 	 x.rtc_read();
 
 	 close (i2cfile);
