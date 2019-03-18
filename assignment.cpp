@@ -94,7 +94,7 @@ else{
  int Rpi2c::rtc_read(){
  	// unsigned char* data= new unsigned char [number];
  //	buffer[0]=value;
- 	rtcdata=write(i2cfile,buffer,1);
+ //	rtcdata=write(i2cfile,buffer,1);
  	rtcdata= read(i2cfile, buffer,7);
 
  	if(rtcdata !=7){
