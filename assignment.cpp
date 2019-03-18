@@ -173,7 +173,7 @@ return 0;
 		//  preserve the OUT control bit while writing the frequency and enable bits
 		   buffer[8] = (buffer[8] & 0x80) | (ena ? 0x10 : 0) | ((char)rs & 0x03);
 			cout << "Writing back registers value" << endl;
-			cout << "[buffer:0x07] = %02x\n" << buffer[8] <<endl;
+			cout << "[buffer:0x07] = %02x\n" << buffer[7] <<endl;
 
 			if (!write(7,buffer, 1)){
 						perror("Failed to write buffer values  .");
