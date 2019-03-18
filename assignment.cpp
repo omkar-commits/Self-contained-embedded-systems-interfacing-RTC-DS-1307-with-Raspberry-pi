@@ -147,7 +147,7 @@ else{
 
  				cout << "The Time in RTC is:" << endl;
  				cout << "Date Y/M/D:"<<  bcdToDec(year)<<"-"<<  bcdToDec(month)<< "-"<<  bcdToDec(day)<<endl;
- 				cout << "Day of this week ->"<<  bcdToDec(dayOfWeek)<<endl;
+ 				cout << "List Day of this week ->"<<  bcdToDec(dayOfWeek)<<endl;
  				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<<  bcdToDec(seconds)<<endl;
 
   }
