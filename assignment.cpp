@@ -121,12 +121,41 @@ else{
 
  return 0;
  }
+  int Rpi2c::current_time(){
+ 	// unsigned char* data= new unsigned char [number];
+ 	// buffer[0]=value;
+ 	rtcdata= read(i2cfile, buffer,7);
+
+ 	if(rtcdata !=7){
+ 		perror("I2c failed to read data from the device");
+ 		return 1;
+ 	}
+ 	else           // return data
+ 			{
+
+ 				unsigned char seconds = buffer[0];
+ 				unsigned char minutes = buffer[1];
+ 				unsigned char hours = buffer[2];
+ 				unsigned char dayOfWeek = buffer[3];
+ 				unsigned char day = buffer[4];
+ 				unsigned char month = buffer[5];
+ 				unsigned char year = buffer[6];
+
+ 				cout << "The Time in RTC is:" << endl;
+ 				cout << "Date Y/M/D:"<<  bcdToDec(year)<<"-"<<  bcdToDec(month)<< "-"<<  bcdToDec(day)<<endl;
+ 				cout << "Day of this week"<<  bcdToDec(dayOfWeek)<<endl;
+ 				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<<  bcdToDec(seconds)<<endl;
+
+  }
+
+ return 0;
+ }
 
  int main (){
 
 	 Rpi2c x;
 	 x.connection();
-	 
+	x.current_time(); 
  x.rtc_w();
 	 x.rtc_read();
 
