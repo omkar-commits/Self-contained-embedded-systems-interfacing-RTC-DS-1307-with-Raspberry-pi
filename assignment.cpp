@@ -49,7 +49,7 @@ public:
 
 	 }
  }
-/* int Rpi2c::rtc_w(){
+ int Rpi2c::rtc_w(){
 	// unsigned char buffer[1];
 	buffer[0]=value;
 	rtcdata= write(i2cfile, buffer, 1);
@@ -90,7 +90,7 @@ else{
 	 	}
 	return 0;
  }
-}*/
+}
  int Rpi2c::rtc_read(){
  	// unsigned char* data= new unsigned char [number];
  //	buffer[0]=value;
@@ -127,7 +127,7 @@ else{
 	 Rpi2c x;
 	 x.connection();
 	 
-// x.rtc_w();
+ x.rtc_w();
 	 x.rtc_read();
 
 	 close (i2cfile);
