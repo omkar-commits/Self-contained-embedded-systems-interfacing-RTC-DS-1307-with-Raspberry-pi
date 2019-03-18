@@ -14,14 +14,14 @@ int bcdToDec(char b) { return (b/16)*10 + (b%16); }
 int decToBcd(char b){ return (b/10*16) + (b%10); }
 int i2cfile;
 typedef struct {
-        int sec;        /*!< seconds [0..59] */
-        int min;        /*!< minutes {0..59] */
-        int hour;       /*!< hours [0..23] */
-        int wday;       /*!< weekday [1..7, where 1 = sunday, 2 = monday, ... */
-        int date;       /*!< day of month [0..31] */
-        int mon;        /*!< month of year [1..12] */
-        int year;       /*!< year [2000..2255] */
-    } Time_rtc;
+        int sec;        
+        int min;        
+        int hour;       
+        int wday;       
+        int date;       
+        int mon;        
+        int year;       
+    } Time_rtc;   // Structure defined to set alarm timr
 
 
 typedef enum {
@@ -29,7 +29,7 @@ typedef enum {
 		        RS4kHz = 1,
 		        RS8kHz = 2,
 		        RS32kHz = 3
-		    } SqwRateSelect_t;
+		    } SqwRateSelect_t; // 
 
 class Rpi2c{
 protected:
