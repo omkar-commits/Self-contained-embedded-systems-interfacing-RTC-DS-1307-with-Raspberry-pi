@@ -23,7 +23,8 @@ public:
 	int address= 0x68;
 	int rtc_w();
 	int rtc_read();
-		int current_time();
+	bool swq_op(bool ena,SqwRateSelect_t rs);
+	int current_time();
 //	int rtc_write();
 
 	int number=7;
@@ -52,7 +53,7 @@ public:
  }
  int Rpi2c::rtc_w(){
 	// unsigned char buffer[1];
-	buffer[0]=value;
+	buffer[0]=value; // CH bit to "0"
 	rtcdata= write(i2cfile, buffer, 1);
 
 	if(rtcdata !=1){
@@ -76,58 +77,26 @@ else{
 	 return 1;
 	 	}
 	 	else{
-	 						char seconds = buffer[1];
-	 		 				char minutes = buffer[2];
-	 		 				char hours = buffer[3];
-	 		 				char dayOfWeek = buffer[4];
- 				            char day = buffer[5];
- 			            	char month = buffer[6];
- 			         	char year = buffer[7];
+	 		unsigned char seconds = buffer[1];
+	 		unsigned char minutes = buffer[2];
+	 		 				unsigned char hours = buffer[3];
+	 		 				unsigned char dayOfWeek = buffer[4];
+	 		 				unsigned char day = buffer[5];
+	 		 				unsigned char month = buffer[6];
+	 		 				unsigned char year = buffer[7];
 
 	 		 				cout << "The Time written in RTC is:" << endl;
 	 		 				 				cout << "Date Y/M/D:"<<  bcdToDec(year)<<"-"<<  bcdToDec(month)<< "-"<<  bcdToDec(day)<<endl;
-	 		 				 				cout << "Day of this week->"<<  bcdToDec(dayOfWeek)<<endl;
+	 		 				 				cout << "Day of this week"<<  bcdToDec(dayOfWeek)<<endl;
 	 		 				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<< bcdToDec(seconds)<<endl;
 	 	}
+	return buffer;
+ }
 	return 0;
  }
-}
  int Rpi2c::rtc_read(){
  	// unsigned char* data= new unsigned char [number];
- //	buffer[0]=value;
-	rtcdata=write(i2cfile,buffer,1);
- 	rtcdata= read(i2cfile, buffer,7);
-
- 	if(rtcdata !=7){
- 		perror("I2c failed to read data from the device");
- 		return 1;
- 	}
- 	else           // return data
- 			{
-
- 				char seconds = buffer[0];
- 				char minutes = buffer[1];
- 				char hours = buffer[2];
- 				char dayOfWeek = buffer[3];
- 				char day = buffer[4];
- 				char month = buffer[5];
- 				char year = buffer[6];
-
- 				cout << "The Time after Read in RTC is:" << endl;
- 				cout << "Date Y/M/D:"<<  bcdToDec(year)<<"-"<<  bcdToDec(month)<< "-"<<  bcdToDec(day)<<endl;
- 				cout << "Day of this week ->"<<  bcdToDec(dayOfWeek)<<endl;
-	 				cout << "Day of the week 1 -> Sunday \n Day of the week 2 -> Monday \n Day of the week 3 -> Tuesday \n Day of the week 4 -> Wednesday \n Day of the week 5 -> Thursday \nDay of the week 6 -> Friday \nDay of the week 7 -> Saturday \n"<<endl;
- 				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<<  bcdToDec(seconds)<<endl;
-  }
-
- return 0;
- }
-  int Rpi2c::current_time(){
- 	// unsigned char* data= new unsigned char [number];
  	// buffer[0]=value;
- 		rtcdata=write(i2cfile,buffer,1);
-
-
  	rtcdata= read(i2cfile, buffer,7);
 
  	if(rtcdata !=7){
@@ -147,21 +116,74 @@ else{
 
  				cout << "The Time in RTC is:" << endl;
  				cout << "Date Y/M/D:"<<  bcdToDec(year)<<"-"<<  bcdToDec(month)<< "-"<<  bcdToDec(day)<<endl;
- 				cout << "List Day of this week ->"<<  bcdToDec(dayOfWeek)<<endl;
+ 				cout << "Day of this week"<<  bcdToDec(dayOfWeek)<<endl;
  				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<<  bcdToDec(seconds)<<endl;
 
   }
 
  return 0;
  }
+ int Rpi2c::current_time(){
+  	// unsigned char* data= new unsigned char [number];
+  	// buffer[0]=value;
+  	rtcdata= read(i2cfile, buffer,7);
+
+  	if(rtcdata !=7){
+  		perror("I2c failed to read data from the device");
+  		return 1;
+  	}
+  	else           // return data
+  			{
+
+  				unsigned char seconds = buffer[0];
+  				unsigned char minutes = buffer[1];
+  				unsigned char hours = buffer[2];
+  				unsigned char dayOfWeek = buffer[3];
+  				unsigned char day = buffer[4];
+  				unsigned char month = buffer[5];
+  				unsigned char year = buffer[6];
+
+  				cout << "The Time in RTC is:" << endl;
+  				cout << "Date Y/M/D:"<<  bcdToDec(year)<<"-"<<  bcdToDec(month)<< "-"<<  bcdToDec(day)<<endl;
+  				cout << "Day of this week"<<  bcdToDec(dayOfWeek)<<endl;
+  				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<<  bcdToDec(seconds)<<endl;
+
+   }
+
+  return 0;
+ }
+
+bool Rpi2c::swq_op(bool ena, SqwRateSelect_t rs){
+	unsigned char buffer[8]= 0x07; // firtst trying to read buffer values.
+	cout << "firtst trying to read buffer values" << endl;
+		if (!read(7,buffer, 1)){
+			perror("Failed to read buffer values  .");
+return 0;
+}
+		cout << "[buffer:0x07] = %02x\n" << buffer[8] <<endl;
+
+		//  preserve the OUT control bit while writing the frequency and enable bits
+		   buffer[8] = (buffer[8] & 0x80) | (ena ? 0x10 : 0) | ((char)rs & 0x03);
+			cout << "Writing back registers value" << endl;
+			cout << "[buffer:0x07] = %02x\n" << buffer[8] <<endl;
+
+			if (!write(7,buffer, 1)){
+						perror("Failed to write buffer values  .");
+			return 0;
+			}
+			cout << "Successfuly changes the squarewave output" << endl;
+			return 1;
+}
+
 
  int main (){
 
 	 Rpi2c x;
 	 x.connection();
-	x.current_time(); 
- x.rtc_w();
- x.rtc_read();
+	 x.current_time();
+	 x.rtc_w();
+	 x.rtc_read();
+	 x.swq_op(true, RS1Hz);
 
 	 close (i2cfile);
 	 return 0;
