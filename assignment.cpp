@@ -23,6 +23,12 @@ public:
 	int address= 0x68;
 	int rtc_w();
 	int rtc_read();
+	  typedef enum {
+		        RS1Hz = 0,
+		        RS4kHz = 1,
+		        RS8kHz = 2,
+		        RS32kHz = 3
+		    } SqwRateSelect_t;
 	bool swq_op(bool ena,SqwRateSelect_t rs);
 	int current_time();
 //	int rtc_write();
@@ -32,12 +38,7 @@ public:
 	unsigned char value=0x00;
 	unsigned char buffer[BUFFER_SIZE];
 	//virtual ~Rpi2c();
-	  typedef enum {
-        RS1Hz = 0,
-        RS4kHz = 1,
-        RS8kHz = 2,
-        RS32kHz = 3
-    } SqwRateSelect_t;
+
 };
 
  int Rpi2c::connection()
@@ -189,7 +190,7 @@ return 0;
 	 x.current_time();
 	 x.rtc_w();
 	 x.rtc_read();
-	 x.swq_op(true, RS1Hz);
+	 x.swq_op(true,  RS4kHz);
 
 	 close (i2cfile);
 	 return 0;
