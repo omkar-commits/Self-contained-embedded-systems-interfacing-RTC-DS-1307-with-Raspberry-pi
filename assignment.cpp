@@ -127,7 +127,7 @@ else{
 	 Rpi2c x;
 	 x.connection();
 	 
- x.rtc_w();
+// x.rtc_w();
 	 x.rtc_read();
 
 	 close (i2cfile);
