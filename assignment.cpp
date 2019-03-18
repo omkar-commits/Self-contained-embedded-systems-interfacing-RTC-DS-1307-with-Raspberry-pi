@@ -162,7 +162,7 @@ else{
  }
 
 bool Rpi2c::swq_op(bool ena, SqwRateSelect_t rs){
-	unsigned char buffer[8]= 0x07; // firtst trying to read buffer values.
+	unsigned char buffer[8]= {0x07}; // firtst trying to read buffer values.
 	cout << "firtst trying to read buffer values" << endl;
 		if (!read(7,buffer, 1)){
 			perror("Failed to read buffer values  .");
