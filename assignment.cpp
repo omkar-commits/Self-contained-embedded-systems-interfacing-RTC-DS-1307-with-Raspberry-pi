@@ -13,6 +13,12 @@ using namespace std;
 int bcdToDec(char b) { return (b/16)*10 + (b%16); }
 int decToBcd(char b){ return (b/10*16) + (b%10); }
 int i2cfile;
+typedef enum {
+		        RS1Hz = 0,
+		        RS4kHz = 1,
+		        RS8kHz = 2,
+		        RS32kHz = 3
+		    } SqwRateSelect_t;
 class Rpi2c{
 protected:
 
@@ -23,12 +29,7 @@ public:
 	int address= 0x68;
 	int rtc_w();
 	int rtc_read();
-	  typedef enum {
-		        RS1Hz = 0,
-		        RS4kHz = 1,
-		        RS8kHz = 2,
-		        RS32kHz = 3
-		    } SqwRateSelect_t;
+	  
 	bool swq_op(bool ena,SqwRateSelect_t rs);
 	int current_time();
 //	int rtc_write();
@@ -97,7 +98,7 @@ else{
 	 		 				 				cout << "Day of this week"<<  bcdToDec(dayOfWeek)<<endl;
 	 		 				cout << "Time H/M/S: "<<  bcdToDec(hours)<< "-"<<   bcdToDec(minutes)<< "-"<< bcdToDec(seconds)<<endl;
 	 	}
-	//return buffer;
+	return buffer;
  }
 	return 0;
  }
@@ -161,7 +162,7 @@ else{
  }
 
 bool Rpi2c::swq_op(bool ena, SqwRateSelect_t rs){
-	unsigned char buffer[8]= {0x07}; // firtst trying to read buffer values.
+	unsigned char buffer[8]= 0x07; // firtst trying to read buffer values.
 	cout << "firtst trying to read buffer values" << endl;
 		if (!read(7,buffer, 1)){
 			perror("Failed to read buffer values  .");
@@ -190,7 +191,7 @@ return 0;
 	 x.current_time();
 	 x.rtc_w();
 	 x.rtc_read();
-	 x.swq_op(true,  RS4kHz);
+	 x.swq_op(true,RS4kHz);
 
 	 close (i2cfile);
 	 return 0;
